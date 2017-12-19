@@ -41,7 +41,7 @@ namespace OpenWallpaper
             this.notifyIcon.Visible = true;
             //打开菜单项
             System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("Settings");
-            open.Click += new EventHandler(Show);
+            open.Click += new EventHandler(ShowSettings);
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("Exit");
             exit.Click += new EventHandler(Close);
@@ -51,15 +51,16 @@ namespace OpenWallpaper
 
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, e) =>
             {
-                if (e.Button == MouseButtons.Left) this.Show(o, e);
+                if (e.Button == MouseButtons.Left) this.ShowSettings(o, e);
             });
         }
 
-        private void Show(object sender, EventArgs e)
+        private void ShowSettings(object sender, EventArgs e)
         {
             this.Visibility = System.Windows.Visibility.Visible;
             this.ShowInTaskbar = true;
-            this.Activate();
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.Show();
         }
 
         private void Hide(object sender, EventArgs e)

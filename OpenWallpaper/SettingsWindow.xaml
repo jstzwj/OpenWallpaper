@@ -1,0 +1,27 @@
+﻿<Window x:Class="OpenWallpaper.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenWallpaper"
+        mc:Ignorable="d"
+        Title="Settings" Height="434.999" Width="318.462">
+    <Grid>
+        <TabControl  Margin="0,0,0,0">
+            <TabItem Header="Performance">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="General">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="About">
+                <Grid Background="#FFE5E5E5">
+                    <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="AppIcon.ico"/>
+                    <Label Content="OpenWallpaper v1.0" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Date: 2017/12/20" HorizontalAlignment="Left" Margin="115,40,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Author: JasonWang" HorizontalAlignment="Left" Margin="115,65,0,0" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

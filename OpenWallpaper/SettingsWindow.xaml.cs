@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace OpenWallpaper
 {
     /// <summary>
-    /// Settings.xaml 的交互逻辑
+    /// SettingsWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class Settings : Window
+    public partial class SettingsWindow : Window
     {
-        public Settings()
+        public SettingsWindow()
         {
             InitializeComponent();
         }
