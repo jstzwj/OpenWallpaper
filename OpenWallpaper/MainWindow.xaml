@@ -1,0 +1,16 @@
+﻿<Window x:Class="OpenWallpaper.MainWindow"
+        xmlns:wfi ="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        xmlns:wf ="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenWallpaper"
+        xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" WindowStyle="None" Height="350" Width="525"
+        BorderThickness="0" AllowsTransparency="True">
+    <Grid>
+        <cefSharp:ChromiumWebBrowser Name="mychrome" Grid.Row="0" Address="http://www.html5tricks.com/demo/html5-canvas-3d-cube-wave/index.html"/>
+    </Grid>
+</Window>
