@@ -1,5 +1,4 @@
-﻿using OpenWallpaper.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 
-namespace OpenWallpaper
+namespace OpenWallpaper.UI
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -47,11 +46,11 @@ namespace OpenWallpaper
 
             //打开菜单项
             System.Windows.Forms.MenuItem wallPapers = new System.Windows.Forms.MenuItem("Wallpapers");
-            wallPapers.Click += new EventHandler(ShowSettings);
+            wallPapers.Click += new EventHandler(ShowWallpapers);
 
             //打开菜单项
             System.Windows.Forms.MenuItem shop = new System.Windows.Forms.MenuItem("Shop");
-            shop.Click += new EventHandler(ShowSettings);
+            shop.Click += new EventHandler(ShowShop);
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("Exit");
             exit.Click += new EventHandler(Close);

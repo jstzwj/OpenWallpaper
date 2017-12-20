@@ -24,9 +24,9 @@ namespace OpenWallpaper.UI
             DependencyProperty.Register("ImagePath", typeof(DateTime), typeof(WallpaperItem),
             new FrameworkPropertyMetadata(DateTime.Now, new PropertyChangedCallback(ImagePathPropertyChangedCallback)));
 
-        public static readonly DependencyProperty NameProperty =
-            DependencyProperty.Register("Name", typeof(DateTime), typeof(WallpaperItem),
-            new FrameworkPropertyMetadata(DateTime.Now, new PropertyChangedCallback(NamePropertyChangedCallback)));
+        public static readonly DependencyProperty WallpaperNameProperty =
+            DependencyProperty.Register("WallpaperName", typeof(DateTime), typeof(WallpaperItem),
+            new FrameworkPropertyMetadata(DateTime.Now, new PropertyChangedCallback(WallpaperNamePropertyChangedCallback)));
 
         public static readonly DependencyProperty BriefProperty =
             DependencyProperty.Register("Brief", typeof(DateTime), typeof(WallpaperItem),
@@ -41,7 +41,7 @@ namespace OpenWallpaper.UI
         {
         }
 
-        private static void NamePropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)
+        private static void WallpaperNamePropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)
         {
         }
 

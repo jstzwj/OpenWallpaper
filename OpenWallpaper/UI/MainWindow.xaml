@@ -1,4 +1,4 @@
-﻿<Window x:Class="OpenWallpaper.MainWindow"
+﻿<Window x:Class="OpenWallpaper.UI.MainWindow"
         xmlns:wfi ="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
         xmlns:wf ="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
