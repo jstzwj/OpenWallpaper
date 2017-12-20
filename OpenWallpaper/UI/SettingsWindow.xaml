@@ -16,7 +16,7 @@
             </TabItem>
             <TabItem Header="About">
                 <Grid Background="#FFE5E5E5">
-                    <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="Resources/AppIcon.ico"/>
+                    <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/Resources/AppIcon.ico"/>
                     <Label Content="OpenWallpaper v1.0" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top"/>
                     <Label Content="Date: 2017/12/20" HorizontalAlignment="Left" Margin="115,40,0,0" VerticalAlignment="Top"/>
                     <Label Content="Author: JasonWang" HorizontalAlignment="Left" Margin="115,65,0,0" VerticalAlignment="Top"/>
