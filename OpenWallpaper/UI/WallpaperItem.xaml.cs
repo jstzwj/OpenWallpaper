@@ -21,16 +21,16 @@ namespace OpenWallpaper.UI
     public partial class WallpaperItem : UserControl
     {
         public static readonly DependencyProperty ImagePathProperty =
-            DependencyProperty.Register("ImagePath", typeof(DateTime), typeof(WallpaperItem),
-            new FrameworkPropertyMetadata(DateTime.Now, new PropertyChangedCallback(ImagePathPropertyChangedCallback)));
+            DependencyProperty.Register("ImagePath", typeof(string), typeof(WallpaperItem),
+            new FrameworkPropertyMetadata("", new PropertyChangedCallback(ImagePathPropertyChangedCallback)));
 
         public static readonly DependencyProperty WallpaperNameProperty =
-            DependencyProperty.Register("WallpaperName", typeof(DateTime), typeof(WallpaperItem),
-            new FrameworkPropertyMetadata(DateTime.Now, new PropertyChangedCallback(WallpaperNamePropertyChangedCallback)));
+            DependencyProperty.Register("WallpaperName", typeof(string), typeof(WallpaperItem),
+            new FrameworkPropertyMetadata("", new PropertyChangedCallback(WallpaperNamePropertyChangedCallback)));
 
         public static readonly DependencyProperty BriefProperty =
-            DependencyProperty.Register("Brief", typeof(DateTime), typeof(WallpaperItem),
-            new FrameworkPropertyMetadata(DateTime.Now, new PropertyChangedCallback(BriefPropertyChangedCallback)));
+            DependencyProperty.Register("Brief", typeof(string), typeof(WallpaperItem),
+            new FrameworkPropertyMetadata("", new PropertyChangedCallback(BriefPropertyChangedCallback)));
 
         public WallpaperItem()
         {
@@ -39,10 +39,20 @@ namespace OpenWallpaper.UI
 
         private static void ImagePathPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)
         {
+            if (sender != null)
+            {
+                WallpaperItem obj = (WallpaperItem)sender;
+                obj.WallpaperImage.Source = new BitmapImage(new Uri((string)arg.NewValue, UriKind.RelativeOrAbsolute));
+            }
         }
 
         private static void WallpaperNamePropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)
         {
+            if (sender != null)
+            {
+                WallpaperItem obj= (WallpaperItem)sender;
+                obj.WallpaperName.Content = (string)arg.NewValue;
+            }
         }
 
         private static void BriefPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)

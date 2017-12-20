@@ -12,7 +12,9 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
             <TabItem Header="General">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <CheckBox Content="AutoStart" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                </Grid>
             </TabItem>
             <TabItem Header="About">
                 <Grid Background="#FFE5E5E5">

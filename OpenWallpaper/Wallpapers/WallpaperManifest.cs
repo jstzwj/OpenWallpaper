@@ -3,55 +3,63 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenWallpaper.Wallpapers
 {
+
     [JsonObject(MemberSerialization.OptOut)]
-    public class WallpaperManifestItem
+    public class WallpaperManifest
     {
         [JsonProperty(PropertyName = "wallpaperName")]
         [DefaultValue("default")]
         public string WallpaperName { get; set; }
 
-        [JsonProperty(PropertyName = "wallpaperPath")]
-        [DefaultValue("/")]
-        public string WallpaperPath { get; set; }
+        [JsonProperty(PropertyName = "wallpaperMainPath")]
+        [DefaultValue("index.html")]
+        public string WallpaperMainPath { get; set; }
 
 
         [JsonProperty(PropertyName = "wallpaperType")]
         [DefaultValue("web")]
-        public string wallpaperType { get; set; }
-    }
+        public string WallpaperType { get; set; }
 
-    [JsonObject(MemberSerialization.OptOut)]
-    public class WallpaperManifest
-    {
-        public List<WallpaperManifestItem> list;
+        [JsonProperty(PropertyName = "wallpaperThumbnail")]
+        [DefaultValue("")]
+        public string WallpaperThumbnail { get; set; }
 
-        public WallpaperManifest()
+
+        public static WallpaperManifest GetWallpaper(string path)
         {
-            list = new List<WallpaperManifestItem>();
+            string settingsFile = ReadSettingsAsString(path);
+            WallpaperManifest result;
+            result = JsonConvert.DeserializeObject<WallpaperManifest>(settingsFile);
+
+            return result;
         }
 
-        public static WallpaperManifest GetWallpapersList(string jsonData)
+        private static string ReadSettingsAsString(string path)
         {
-            List<WallpaperManifestItem> list = new List<WallpaperManifestItem>();
-            JObject obj = JObject.Parse(jsonData);
-            JArray data = (JArray)obj["wallpapers"];
-            if (data != null && data.Count > 0)
+            string result = null;
+
+            try
             {
-                foreach (var item in data)
+                FileStream fs = new FileStream(path, FileMode.Open);
+                using (StreamReader sr = new StreamReader(fs))
                 {
-                    list.Add(JsonConvert.DeserializeObject<WallpaperManifestItem>(item.ToString()));
+                    result = sr.ReadToEnd();
                 }
             }
+            catch (IOException e)
+            {
+                // _logger.LogError(default(EventId), e, e.Message);
+            }
 
-            WallpaperManifest wallpaperManifest = new WallpaperManifest();
-            wallpaperManifest.list = list;
-            return wallpaperManifest;
+            return result;
         }
     }
+
 }

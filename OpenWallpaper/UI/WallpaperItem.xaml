@@ -5,11 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpenWallpaper.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Image Height="100" Margin="100,10,100,0" VerticalAlignment="Top" Width="100"/>
-        <Label Content="Name" Margin="100,160,100,0" VerticalAlignment="Top" Height="31" Width="100"/>
-        <Label Content="Brief" Margin="50,200,50,0" VerticalAlignment="Top" Height="80" Width="200"/>
-
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid Cursor="None">
+        <Image Name="WallpaperImage" Height="100" VerticalAlignment="Top" Width="100" Cursor="Hand"/>
+        <Label Name="WallpaperName" Content="Name" Margin="0,69,0,0" VerticalAlignment="Top" Height="31" Width="100" Background="#4C707070" Foreground="White" Cursor="Hand"/>
     </Grid>
 </UserControl>

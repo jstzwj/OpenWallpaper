@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:OpenWallpaper.UI"
         mc:Ignorable="d"
         Title="WallpapersWindow" Height="400" Width="600">
-    <Grid>
+    <WrapPanel Name="MainWrapPanel">
 
-    </Grid>
+    </WrapPanel>
 </Window>
