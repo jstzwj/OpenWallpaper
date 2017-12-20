@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenWallpaper.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,14 +40,23 @@ namespace OpenWallpaper
             this.notifyIcon = new NotifyIcon();
             this.notifyIcon.Icon = new System.Drawing.Icon("AppIcon.ico");
             this.notifyIcon.Visible = true;
+
             //打开菜单项
-            System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("Settings");
-            open.Click += new EventHandler(ShowSettings);
+            System.Windows.Forms.MenuItem settings = new System.Windows.Forms.MenuItem("Settings");
+            settings.Click += new EventHandler(ShowSettings);
+
+            //打开菜单项
+            System.Windows.Forms.MenuItem wallPapers = new System.Windows.Forms.MenuItem("Wallpapers");
+            wallPapers.Click += new EventHandler(ShowSettings);
+
+            //打开菜单项
+            System.Windows.Forms.MenuItem shop = new System.Windows.Forms.MenuItem("Shop");
+            shop.Click += new EventHandler(ShowSettings);
             //退出菜单项
             System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("Exit");
             exit.Click += new EventHandler(Close);
             //关联托盘控件
-            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { open, exit };
+            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { settings, wallPapers, shop, exit };
             notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
 
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, e) =>
@@ -61,6 +71,22 @@ namespace OpenWallpaper
             this.ShowInTaskbar = true;
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.Show();
+        }
+
+        private void ShowWallpapers(object sender, EventArgs e)
+        {
+            this.Visibility = System.Windows.Visibility.Visible;
+            this.ShowInTaskbar = true;
+            WallpapersWindow wallpapersWindow = new WallpapersWindow();
+            wallpapersWindow.Show();
+        }
+
+        private void ShowShop(object sender, EventArgs e)
+        {
+            this.Visibility = System.Windows.Visibility.Visible;
+            this.ShowInTaskbar = true;
+            ShopWindow shopWindow = new ShopWindow();
+            shopWindow.Show();
         }
 
         private void Hide(object sender, EventArgs e)
