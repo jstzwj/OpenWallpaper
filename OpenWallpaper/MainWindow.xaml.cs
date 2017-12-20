@@ -37,7 +37,7 @@ namespace OpenWallpaper
         private void icon()
         {
             this.notifyIcon = new NotifyIcon();
-            this.notifyIcon.Icon = new System.Drawing.Icon(@"AppIcon.ico");
+            this.notifyIcon.Icon = new System.Drawing.Icon("AppIcon.ico");
             this.notifyIcon.Visible = true;
             //打开菜单项
             System.Windows.Forms.MenuItem open = new System.Windows.Forms.MenuItem("Settings");

@@ -11,6 +11,6 @@
         Title="MainWindow" WindowStyle="None" Height="350" Width="525"
         BorderThickness="0" AllowsTransparency="True">
     <Grid>
-        <cefSharp:ChromiumWebBrowser Name="mychrome" Grid.Row="0" Address="file:///C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/watch/index.html"/>
+        <cefSharp:ChromiumWebBrowser Name="mychrome" Grid.Row="0" Address="www.baidu.com"/>
     </Grid>
 </Window>
