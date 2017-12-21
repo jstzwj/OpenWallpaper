@@ -37,8 +37,27 @@ namespace OpenWallpaper.UI
                     WallpaperManifest.GetWallpaper(each.WallpaperPath).WallpaperThumbnail
                     );
                 item.SetValue(WallpaperItem.ImagePathProperty, imageAbsolutePath);
+                item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
+                item.WallpaperCheckbox.Unchecked += new RoutedEventHandler(CheckBoxUnchecked);
                 this.MainWrapPanel.Children.Add(item);
             }
         }
+
+        private void CheckBoxChecked(object sender, EventArgs e)
+        {
+            CheckBox obj = (CheckBox)sender;
+            WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
+            WallpaperItem newChildren = new WallpaperItem();
+            newChildren.SetValue(WallpaperItem.WallpaperNameProperty, parent.WallpaperName.Content);
+            newChildren.Margin = new Thickness(10, 10, 10, 10);
+            newChildren.SetValue(WallpaperItem.ImagePathProperty, parent.GetValue(WallpaperItem.ImagePathProperty));
+            newChildren.WallpaperCheckbox.Visibility = Visibility.Hidden;
+            this.Playlist.Children.Add(newChildren);
+        }
+        private void CheckBoxUnchecked(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

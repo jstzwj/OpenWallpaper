@@ -7,9 +7,37 @@
         mc:Ignorable="d"
         Title="WallpapersWindow" Height="400" Width="600">
     <Grid>
-        <WrapPanel Name="MainWrapPanel" Margin="0,0,200,0">
-        </WrapPanel>
+        <Grid Margin="0,0,200,0">
+            <ScrollViewer Margin="0,0,0,180" VerticalScrollBarVisibility="Auto">
+                <WrapPanel Name="MainWrapPanel" Margin="0,0,0,0">
+                </WrapPanel>
+            </ScrollViewer>
+            <Grid Height="180" VerticalAlignment="Bottom">
+                <Grid Height="50" VerticalAlignment="Top">
+                    <Label Content="playlist" FontSize="24"/>
+                </Grid>
+                <ScrollViewer Height="130" VerticalAlignment="Bottom" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <StackPanel Name="Playlist" Orientation="Horizontal"/>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
         <Grid Name="WallpaperDetails" Width="200" HorizontalAlignment="Right">
+            <Image HorizontalAlignment="Left" Height="100" Margin="47,10,0,0" VerticalAlignment="Top" Width="100"/>
+            <Grid HorizontalAlignment="Left" Height="244" Margin="10,115,0,0" VerticalAlignment="Top" Width="180">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="37*"/>
+                    <ColumnDefinition Width="53*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="27" Width="54"/>
+                <Label Content="name" Grid.Column="1" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Width="86"/>
+                <Label Content="Author:" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
+                <Label Content="author" Grid.Column="1" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="86"/>
+                <Label Content="Brief:" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
+                <Label Content="brief" Grid.Column="1" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Height="60" Width="86"/>
+                <Label Content="Type" HorizontalAlignment="Left" Margin="9,72,0,0" VerticalAlignment="Top"/>
+                <Label Content="type" Grid.Column="1" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="86"/>
+            </Grid>
+
         </Grid>
     </Grid>
 </Window>
