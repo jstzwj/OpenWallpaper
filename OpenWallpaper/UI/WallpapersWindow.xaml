@@ -8,20 +8,33 @@
         Title="WallpapersWindow" Height="600" Width="800">
     <Grid>
         <Grid Margin="0,0,200,0">
-            <ScrollViewer Margin="0,0,0,180" VerticalScrollBarVisibility="Auto">
+            <Grid Height="50" VerticalAlignment="Top">
+                <TextBox Width="200" Margin="10,10,10,10" HorizontalAlignment="Left" FontSize="20"/>
+                <Button Content="search" Width="50" Margin="210,10,10,10" HorizontalAlignment="Left" BorderBrush="#00707070" Cursor="Hand">
+                </Button>
+
+                <Button Content="+" Name="ButtonAdd" Width="30" Margin="10,10,50,10" HorizontalAlignment="right" BorderBrush="#00707070" Cursor="Hand">
+                </Button>
+
+                <Button Content="-" Name="ButtonDelete" Width="30" Margin="10,10,10,10" HorizontalAlignment="right" BorderBrush="#00707070" Cursor="Hand">
+                </Button>
+
+                <Button Content="play" Name="ButtonPlay" Width="30" Margin="10,10,90,10" HorizontalAlignment="right" BorderBrush="#00707070" Cursor="Hand"/>
+            </Grid>
+            <ScrollViewer Margin="0,50,0,180" VerticalScrollBarVisibility="Auto">
                 <WrapPanel Name="MainWrapPanel" Margin="0,0,0,0">
                 </WrapPanel>
             </ScrollViewer>
-            <Grid Height="180" VerticalAlignment="Bottom">
+            <Grid Height="180" VerticalAlignment="Bottom" Background="#FFE2E2E2">
                 <Grid Height="50" VerticalAlignment="Top">
-                    <Label Content="playlist" FontSize="24"/>
+                    <Label Content="playlist" FontSize="24" FontFamily="Microsoft YaHei"/>
                 </Grid>
                 <ScrollViewer Height="130" VerticalAlignment="Bottom" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                     <StackPanel Name="Playlist" Orientation="Horizontal"/>
                 </ScrollViewer>
             </Grid>
         </Grid>
-        <Grid Name="WallpaperDetails" Width="200" HorizontalAlignment="Right">
+        <Grid Name="WallpaperDetails" Width="200" HorizontalAlignment="Right" Background="#FFEAE8FF">
             <Image Name="DetailImage" HorizontalAlignment="Left" Height="100" Margin="47,10,0,0" VerticalAlignment="Top" Width="100"/>
             <Grid HorizontalAlignment="Left" Height="244" Margin="10,115,0,0" VerticalAlignment="Top" Width="180">
                 <Grid.ColumnDefinitions>

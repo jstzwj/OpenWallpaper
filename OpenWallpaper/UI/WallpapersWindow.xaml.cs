@@ -46,16 +46,20 @@ namespace OpenWallpaper.UI
                 item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
                 item.WallpaperCheckbox.Unchecked += new RoutedEventHandler(CheckBoxUnchecked);
                 item.ItemMask.MouseDown += new MouseButtonEventHandler(ItemMaskClicked);
-                this.MainWrapPanel.Children.Add(item);
+                MainWrapPanel.Children.Add(item);
 
                 if (each.IsInPlaylist)
-                    addWallpaperItemInPlaylist(item);
+                    AddWallpaperItemInPlaylist(item);
 
                 if (each == _wallpapersManifest.list[0])
                     showDetailsFromItem(item);
 
                 _showPage = showPage;
-            } 
+            }
+
+            ButtonAdd.Click += new RoutedEventHandler(AddButtonClicked);
+            ButtonDelete.Click += new RoutedEventHandler(DeleteButtonClicked);
+            ButtonPlay.Click += new RoutedEventHandler(PlayButtonClicked);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -72,7 +76,7 @@ namespace OpenWallpaper.UI
             DetailType.Content = item.data.WallpaperType;
         }
 
-        public void addWallpaperItemInPlaylist(WallpaperItem item)
+        public void AddWallpaperItemInPlaylist(WallpaperItem item)
         {
             WallpaperItem newChildren = new WallpaperItem();
             newChildren.data = item.data;
@@ -83,7 +87,7 @@ namespace OpenWallpaper.UI
             this.Playlist.Children.Add(newChildren);
         }
 
-        public void removeWallpaperItemInPlaylist(WallpaperItem item)
+        public void RemoveWallpaperItemInPlaylist(WallpaperItem item)
         {
             WallpaperItem removedItem = null;
             foreach (WallpaperItem each in Playlist.Children)
@@ -119,12 +123,6 @@ namespace OpenWallpaper.UI
             CheckBox obj = (CheckBox)sender;
             WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
 
-            addWallpaperItemInPlaylist(parent);
-
-            WallpaperManifestItem wallpaperManifestItem = FindInManifest(parent);
-            if(wallpaperManifestItem!=null)
-                wallpaperManifestItem.IsInPlaylist = true;
-
             showDetailsFromItem(parent);
 
             string indexAbsolutePath = System.IO.Path.Combine(
@@ -140,13 +138,35 @@ namespace OpenWallpaper.UI
             CheckBox obj = (CheckBox)sender;
             WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
 
-            removeWallpaperItemInPlaylist(parent);
-
-            WallpaperManifestItem wallpaperManifestItem = FindInManifest(parent);
-            if (wallpaperManifestItem != null)
-                wallpaperManifestItem.IsInPlaylist = false;
-
             showDetailsFromItem(parent);
+        }
+
+        private void PlayButtonClicked(object sender, EventArgs e)
+        {
+            Playlist.Children.Clear();
+            foreach (WallpaperItem each in MainWrapPanel.Children)
+            {
+                WallpaperManifestItem wallpaperManifestItem = FindInManifest(each);
+                if (each.WallpaperCheckbox.IsChecked == true)
+                {
+                    AddWallpaperItemInPlaylist(each);                    
+                    if (wallpaperManifestItem != null)
+                        wallpaperManifestItem.IsInPlaylist = true;
+                }
+                else
+                {
+                    if (wallpaperManifestItem != null)
+                        wallpaperManifestItem.IsInPlaylist = false;
+                }
+            }
+        }
+
+        private void AddButtonClicked(object sender, EventArgs e)
+        {
+        }
+
+        private void DeleteButtonClicked(object sender, EventArgs e)
+        {
         }
 
         private void ItemMaskClicked(object sender, EventArgs e)
