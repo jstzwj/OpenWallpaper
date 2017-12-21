@@ -22,9 +22,9 @@ namespace OpenWallpaper.UI
     {
         private WallpapersManifest _wallpapersManifest;
 
-        private WallpaperItem _lastClickedItem;
+        private MainWindow.ShowPageEventHandler _showPage;
 
-        public WallpapersWindow()
+        public WallpapersWindow(MainWindow.ShowPageEventHandler showPage)
         {
             InitializeComponent();
             _wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
@@ -48,6 +48,8 @@ namespace OpenWallpaper.UI
 
                 if (each == _wallpapersManifest.list[0])
                     showDetailsFromItem(item);
+
+                _showPage = showPage;
             } 
         }
 
@@ -73,6 +75,13 @@ namespace OpenWallpaper.UI
             this.Playlist.Children.Add(newChildren);
 
             showDetailsFromItem(parent);
+
+            string indexAbsolutePath = System.IO.Path.Combine(
+                    System.IO.Path.GetDirectoryName(parent.data.WallpaperPath),
+                    WallpaperManifest.GetWallpaper(parent.data.WallpaperPath).WallpaperMainPath
+                    );
+
+            _showPage(indexAbsolutePath);
         }
 
         private void CheckBoxUnchecked(object sender, EventArgs e)
@@ -92,6 +101,8 @@ namespace OpenWallpaper.UI
 
             if (removedItem != null)
                 Playlist.Children.Remove(removedItem);
+
+            showDetailsFromItem(parent);
         }
 
         private void ItemMaskClicked(object sender, EventArgs e)

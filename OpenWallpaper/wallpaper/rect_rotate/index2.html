@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>HTML5多立方体3D翻转动画DEMO演示</title>
+
+  <style>
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+
+</style>
+
+    <style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background: black;
+}
+
+.wrap {
+  height: 100%;
+  transform-style: preserve-3d;
+  perspective: 400px;
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.box {
+  transform-style: preserve-3d;
+  perspective: 5000px;
+  position: absolute;
+  width: 50px;
+  height: 200px;
+  top: 50%;
+  margin-top: -100px;
+  animation: spin 3s infinite alternate;
+}
+
+.side, .top, .bottom {
+  position: absolute;
+}
+
+.top, .bottom {
+  width: 50px;
+  height: 50px;
+}
+
+.top {
+  transform: translateZ(100px);
+}
+
+.bottom {
+  transform: rotateY(180deg) translateZ(100px);
+}
+
+.side:nth-child(3) {
+  transform: rotateX(90deg) translateZ(50px);
+  width: 50px;
+  height: 200px;
+}
+
+.side:nth-child(4) {
+  width: 200px;
+  height: 50px;
+  transform: rotateY(90deg) translateZ(-100px);
+}
+
+.side:nth-child(5) {
+  width: 200px;
+  height: 50px;
+  transform: rotateY(-90deg) translateZ(50px);
+}
+
+.side:nth-child(6) {
+  width: 50px;
+  height: 200px;
+  transform: rotateX(-90deg) translateZ(-100px);
+}
+
+.box:nth-child(1) {
+  left: 0px;
+  animation-delay: -0.075s;
+}
+.box:nth-child(1) div {
+  background: rgba(255, 64, 0, 0.3);
+  border: 1px solid #ff4000;
+}
+
+.box:nth-child(2) {
+  left: 50px;
+  animation-delay: -0.15s;
+}
+.box:nth-child(2) div {
+  background: rgba(255, 128, 0, 0.3);
+  border: 1px solid #ff8000;
+}
+
+.box:nth-child(3) {
+  left: 100px;
+  animation-delay: -0.225s;
+}
+.box:nth-child(3) div {
+  background: rgba(255, 191, 0, 0.3);
+  border: 1px solid #ffbf00;
+}
+
+.box:nth-child(4) {
+  left: 150px;
+  animation-delay: -0.3s;
+}
+.box:nth-child(4) div {
+  background: rgba(255, 255, 0, 0.3);
+  border: 1px solid yellow;
+}
+
+.box:nth-child(5) {
+  left: 200px;
+  animation-delay: -0.375s;
+}
+.box:nth-child(5) div {
+  background: rgba(191, 255, 0, 0.3);
+  border: 1px solid #bfff00;
+}
+
+.box:nth-child(6) {
+  left: 250px;
+  animation-delay: -0.45s;
+}
+.box:nth-child(6) div {
+  background: rgba(128, 255, 0, 0.3);
+  border: 1px solid #80ff00;
+}
+
+.box:nth-child(7) {
+  left: 300px;
+  animation-delay: -0.525s;
+}
+.box:nth-child(7) div {
+  background: rgba(64, 255, 0, 0.3);
+  border: 1px solid #40ff00;
+}
+
+.box:nth-child(8) {
+  left: 350px;
+  animation-delay: -0.6s;
+}
+.box:nth-child(8) div {
+  background: rgba(0, 255, 0, 0.3);
+  border: 1px solid lime;
+}
+
+.box:nth-child(9) {
+  left: 400px;
+  animation-delay: -0.675s;
+}
+.box:nth-child(9) div {
+  background: rgba(0, 255, 64, 0.3);
+  border: 1px solid #00ff40;
+}
+
+.box:nth-child(10) {
+  left: 450px;
+  animation-delay: -0.75s;
+}
+.box:nth-child(10) div {
+  background: rgba(0, 255, 128, 0.3);
+  border: 1px solid #00ff80;
+}
+
+.box:nth-child(11) {
+  left: 500px;
+  animation-delay: -0.825s;
+}
+.box:nth-child(11) div {
+  background: rgba(0, 255, 191, 0.3);
+  border: 1px solid #00ffbf;
+}
+
+.box:nth-child(12) {
+  left: 550px;
+  animation-delay: -0.9s;
+}
+.box:nth-child(12) div {
+  background: rgba(0, 255, 255, 0.3);
+  border: 1px solid cyan;
+}
+
+.box:nth-child(13) {
+  left: 600px;
+  animation-delay: -0.975s;
+}
+.box:nth-child(13) div {
+  background: rgba(0, 191, 255, 0.3);
+  border: 1px solid deepskyblue;
+}
+
+.box:nth-child(14) {
+  left: 650px;
+  animation-delay: -1.05s;
+}
+.box:nth-child(14) div {
+  background: rgba(0, 127, 255, 0.3);
+  border: 1px solid #007fff;
+}
+
+.box:nth-child(15) {
+  left: 700px;
+  animation-delay: -1.125s;
+}
+.box:nth-child(15) div {
+  background: rgba(0, 64, 255, 0.3);
+  border: 1px solid #0040ff;
+}
+
+.box:nth-child(16) {
+  left: 750px;
+  animation-delay: -1.2s;
+}
+.box:nth-child(16) div {
+  background: rgba(0, 0, 255, 0.3);
+  border: 1px solid blue;
+}
+
+.box:nth-child(17) {
+  left: 800px;
+  animation-delay: -1.275s;
+}
+.box:nth-child(17) div {
+  background: rgba(64, 0, 255, 0.3);
+  border: 1px solid #4000ff;
+}
+
+.box:nth-child(18) {
+  left: 850px;
+  animation-delay: -1.35s;
+}
+.box:nth-child(18) div {
+  background: rgba(127, 0, 255, 0.3);
+  border: 1px solid #7f00ff;
+}
+
+.box:nth-child(19) {
+  left: 900px;
+  animation-delay: -1.425s;
+}
+.box:nth-child(19) div {
+  background: rgba(191, 0, 255, 0.3);
+  border: 1px solid #bf00ff;
+}
+
+.box:nth-child(20) {
+  left: 950px;
+  animation-delay: -1.5s;
+}
+.box:nth-child(20) div {
+  background: rgba(255, 0, 255, 0.3);
+  border: 1px solid magenta;
+}
+
+@keyframes spin {
+  0% {
+    transform: translateZ(-300px) rotateX(90deg);
+  }
+  25% {
+    transform: translateZ(-300px) rotateX(90deg);
+  }
+  75% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+</style>
+
+    <script src="js/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class='wrap'>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+  <div class='box'>
+    <div class='top'></div>
+    <div class='bottom'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+    <div class='side'></div>
+  </div>
+</div>
+
+  <script src='http://codepen.io/assets/libs/fullpage/jquery.js'></script>
+
+</body>
+
+</html>

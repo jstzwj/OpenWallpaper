@@ -4,7 +4,11 @@
         "wallpaperID":0,
         "wallpaperName":"clock",
         "wallpaperPath":"C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/watch/manifest.json",
-        "wallpaperType":"web",
-        "wallpaperThumbnail":"thumbnail.png"
+        "wallpaperType":"web"
+    },{
+        "wallpaperID":1,
+        "wallpaperName":"rect-rotate",
+        "wallpaperPath":"C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/rect_rotate/manifest.json",
+        "wallpaperType":"web"
     }]
 }

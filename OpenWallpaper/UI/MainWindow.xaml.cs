@@ -1,4 +1,5 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,18 +25,36 @@ namespace OpenWallpaper.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        public delegate void ShowPageEventHandler(string path);
+
         private IntPtr _handle;
-        private WindowState ws;
-        private WindowState wsl;
+
         private NotifyIcon notifyIcon;
+
+        private ChromiumWebBrowser _chromiumWebBrowser;
 
         public MainWindow()
         {
             InitializeComponent();
-            icon();
+            SetIcon();
+
+            // cef init
+            CefSettings settings = new CefSettings();
+            settings.CefCommandLineArgs.Add("disable-gpu", "0");
+            Cef.Initialize(settings);
+
+            // create browser
+            _chromiumWebBrowser = new ChromiumWebBrowser();
+            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty, "file:///C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/watch/index.html");
+            MainGrid.Children.Add(_chromiumWebBrowser);
         }
 
-        private void icon()
+        public void ShowPage(string path)
+        {
+            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,"file:///" + path);
+        }
+
+        private void SetIcon()
         {
             this.notifyIcon = new NotifyIcon();
             this.notifyIcon.Icon = new System.Drawing.Icon("AppIcon.ico");
@@ -77,7 +96,7 @@ namespace OpenWallpaper.UI
         {
             this.Visibility = System.Windows.Visibility.Visible;
             this.ShowInTaskbar = true;
-            WallpapersWindow wallpapersWindow = new WallpapersWindow();
+            WallpapersWindow wallpapersWindow = new WallpapersWindow(new ShowPageEventHandler(ShowPage));
             wallpapersWindow.Show();
         }
 

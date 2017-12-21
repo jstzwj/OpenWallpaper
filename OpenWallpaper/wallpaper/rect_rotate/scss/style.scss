@@ -1,0 +1,102 @@
+$total: 20;
+$size: 50px;
+$time: 1.5;
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background: black;
+}
+
+.wrap {
+  height: 100%;
+  transform-style: preserve-3d;
+  perspective: 400px;
+  width: $total * $size;
+  margin: 0 auto;
+}
+
+.box {
+  transform-style: preserve-3d;
+  perspective: 5000px;
+  position: absolute;
+  width: $size;
+  height: $size*4;
+  top: 50%;
+  margin-top: -$size*2;
+  animation: spin $time*2+s infinite alternate;
+}
+
+.side, .top, .bottom {
+  position: absolute;
+}
+
+.top, .bottom {
+  width: $size;
+  height: $size;
+}
+
+.top {
+  transform: translateZ($size*2);
+}
+
+.bottom {
+  transform: rotateY(180deg) translateZ($size*2);
+}
+
+.side:nth-child(3){
+  transform: rotateX(90deg) translateZ($size);
+  width: $size;
+  height: $size*4;
+}
+
+.side:nth-child(4){
+  width: $size*4;
+  height: $size;
+  transform: rotateY(90deg) translateZ(-$size*2);
+}
+
+.side:nth-child(5){
+  width: $size*4;
+  height: $size;
+  transform: rotateY(-90deg) translateZ($size);
+}
+
+.side:nth-child(6){
+   width: $size;
+   height: $size*4;
+   transform: rotateX(-90deg) translateZ(-$size*2);
+}
+
+@for $i from 1 through $total {
+  .box:nth-child(#{$i}){
+    $hue: 300/$total * $i;
+    left: ($i - 1) * $size;
+    animation-delay: $time/$total * -$i+s;
+    div {
+      background: hsla($hue, 100%, 50%, .3);
+      border: 1px solid hsl($hue, 100%, 50%);
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: translateZ(-300px) rotateX(90deg);
+  }
+  25% {
+    transform: translateZ(-300px) rotateX(90deg);
+  }
+  75% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
