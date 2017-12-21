@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenWallpaper.Wallpapers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace OpenWallpaper.UI
     /// </summary>
     public partial class WallpaperItem : UserControl
     {
+        public WallpaperManifestItem data { get; set; }
+
         public static readonly DependencyProperty ImagePathProperty =
             DependencyProperty.Register("ImagePath", typeof(string), typeof(WallpaperItem),
             new FrameworkPropertyMetadata("", new PropertyChangedCallback(ImagePathPropertyChangedCallback)));

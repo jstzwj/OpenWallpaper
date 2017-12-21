@@ -20,6 +20,6 @@
         <Image Name="WallpaperImage" Height="100" VerticalAlignment="Top" Width="100"/>
         <Label Name="WallpaperName" Content="Name" Margin="0,69,0,0" VerticalAlignment="Top" Height="31" Width="100" Background="#4C707070" Foreground="White"/>
         <Rectangle Name="ItemMask" Style="{StaticResource TransparentStyle}" HorizontalAlignment="Left" Height="100" Stroke="#00000000" VerticalAlignment="Top" Width="100" Cursor="Hand"/>
-        <CheckBox Name="WallpaperCheckbox" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="WallpaperCheckbox" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top" Cursor="Hand"/>
     </Grid>
 </UserControl>

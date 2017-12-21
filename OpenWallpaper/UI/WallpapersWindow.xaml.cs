@@ -20,14 +20,18 @@ namespace OpenWallpaper.UI
     /// </summary>
     public partial class WallpapersWindow : Window
     {
-        private WallpapersManifest wallpapersManifest;
+        private WallpapersManifest _wallpapersManifest;
+
+        private WallpaperItem _lastClickedItem;
+
         public WallpapersWindow()
         {
             InitializeComponent();
-            wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
-            foreach (var each in wallpapersManifest.list)
+            _wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
+            foreach (var each in _wallpapersManifest.list)
             {
                 WallpaperItem item = new WallpaperItem();
+                item.data = each;
                 item.SetValue(WallpaperItem.WallpaperNameProperty,each.WallpaperName);
                 item.Margin = new Thickness(10, 10, 10, 10);
 
@@ -39,8 +43,21 @@ namespace OpenWallpaper.UI
                 item.SetValue(WallpaperItem.ImagePathProperty, imageAbsolutePath);
                 item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
                 item.WallpaperCheckbox.Unchecked += new RoutedEventHandler(CheckBoxUnchecked);
+                item.ItemMask.MouseDown += new MouseButtonEventHandler(ItemMaskClicked);
                 this.MainWrapPanel.Children.Add(item);
-            }
+
+                if (each == _wallpapersManifest.list[0])
+                    showDetailsFromItem(item);
+            } 
+        }
+
+        public void showDetailsFromItem(WallpaperItem item)
+        {
+            DetailImage.Source = item.WallpaperImage.Source;
+            DetailName.Content = item.WallpaperName.Content;
+            DetailAuthor.Content = "";
+            DetailBrief.Content = "";
+            DetailType.Content = item.data.wallpaperType;
         }
 
         private void CheckBoxChecked(object sender, EventArgs e)
@@ -48,16 +65,40 @@ namespace OpenWallpaper.UI
             CheckBox obj = (CheckBox)sender;
             WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
             WallpaperItem newChildren = new WallpaperItem();
+            newChildren.data = parent.data;
             newChildren.SetValue(WallpaperItem.WallpaperNameProperty, parent.WallpaperName.Content);
             newChildren.Margin = new Thickness(10, 10, 10, 10);
             newChildren.SetValue(WallpaperItem.ImagePathProperty, parent.GetValue(WallpaperItem.ImagePathProperty));
             newChildren.WallpaperCheckbox.Visibility = Visibility.Hidden;
             this.Playlist.Children.Add(newChildren);
+
+            showDetailsFromItem(parent);
         }
+
         private void CheckBoxUnchecked(object sender, EventArgs e)
         {
+            CheckBox obj = (CheckBox)sender;
+            WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
 
+            WallpaperItem removedItem = null;
+            foreach(WallpaperItem each in Playlist.Children)
+            {
+                if(each.data.WallpaperID==parent.data.WallpaperID)
+                {
+                    removedItem = each;
+                    break;
+                }
+            }
+
+            if (removedItem != null)
+                Playlist.Children.Remove(removedItem);
         }
 
+        private void ItemMaskClicked(object sender, EventArgs e)
+        {
+            Rectangle obj = (Rectangle)sender;
+            WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
+            parent.WallpaperCheckbox.IsChecked = !parent.WallpaperCheckbox.IsChecked;
+        }
     }
 }

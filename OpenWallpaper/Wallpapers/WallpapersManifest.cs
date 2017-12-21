@@ -13,6 +13,10 @@ namespace OpenWallpaper.Wallpapers
     [JsonObject(MemberSerialization.OptOut)]
     public class WallpaperManifestItem
     {
+        [JsonProperty(PropertyName = "wallpaperID")]
+        [DefaultValue(0)]
+        public int WallpaperID { get; set; }
+
         [JsonProperty(PropertyName = "wallpaperName")]
         [DefaultValue("default")]
         public string WallpaperName { get; set; }
