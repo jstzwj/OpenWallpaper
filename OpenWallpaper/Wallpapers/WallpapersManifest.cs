@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenWallpaper.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,12 +29,18 @@ namespace OpenWallpaper.Wallpapers
 
         [JsonProperty(PropertyName = "wallpaperType")]
         [DefaultValue("web")]
-        public string wallpaperType { get; set; }
+        public string WallpaperType { get; set; }
+
+        [JsonProperty(PropertyName = "isInPlaylist")]
+        [DefaultValue("false")]
+        public bool IsInPlaylist { get; set; }
     }
 
     [JsonObject(MemberSerialization.OptOut)]
     public class WallpapersManifest
     {
+        public int nextID;
+
         public List<WallpaperManifestItem> list;
 
         public WallpapersManifest()
@@ -43,7 +50,7 @@ namespace OpenWallpaper.Wallpapers
 
         public static WallpapersManifest GetWallpapersList(string path)
         {
-            string jsonData = ReadSettingsAsString(path);
+            string jsonData = SettingsUtil.ReadSettingsAsString(path);
             List<WallpaperManifestItem> list = new List<WallpaperManifestItem>();
             JObject obj = JObject.Parse(jsonData);
             JArray data = (JArray)obj["wallpapers"];
@@ -57,27 +64,24 @@ namespace OpenWallpaper.Wallpapers
 
             WallpapersManifest wallpaperManifest = new WallpapersManifest();
             wallpaperManifest.list = list;
+            wallpaperManifest.nextID = (int)obj["nextID"];
             return wallpaperManifest;
         }
 
-        private static string ReadSettingsAsString(string path)
+        public static void WriteWallpapersList(string path, WallpapersManifest manifest)
         {
-            string result = null;
-
-            try
+            JObject jsonData = new JObject();
+            jsonData["nextID"] = manifest.nextID;
+            JArray wallpapers = new JArray();
+            foreach (var each in manifest.list)
             {
-                FileStream fs = new FileStream(path, FileMode.Open);
-                using (StreamReader sr = new StreamReader(fs))
-                {
-                    result = sr.ReadToEnd();
-                }
+                string wallpaper = JsonConvert.SerializeObject(each);
+                wallpapers.Add(JObject.Parse(wallpaper));
             }
-            catch (IOException e)
-            {
-                // _logger.LogError(default(EventId), e, e.Message);
-            }
+            jsonData["wallpapers"] = wallpapers;
 
-            return result;
+            string data = JsonConvert.SerializeObject(jsonData);
+            SettingsUtil.WriteSettingsAsString(path, data);
         }
     }
 }

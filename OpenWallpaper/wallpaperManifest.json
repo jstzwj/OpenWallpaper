@@ -1,14 +1,17 @@
 {
+    "nextID":2,
     "wallpapers":
     [{
         "wallpaperID":0,
         "wallpaperName":"clock",
         "wallpaperPath":"C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/watch/manifest.json",
-        "wallpaperType":"web"
+        "wallpaperType":"web",
+        "isInPlaylist":true
     },{
         "wallpaperID":1,
         "wallpaperName":"rect-rotate",
         "wallpaperPath":"C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/rect_rotate/manifest.json",
-        "wallpaperType":"web"
+        "wallpaperType":"web",
+        "isInPlaylist":true
     }]
 }

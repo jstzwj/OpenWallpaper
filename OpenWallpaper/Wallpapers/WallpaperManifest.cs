@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using OpenWallpaper.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,29 +35,9 @@ namespace OpenWallpaper.Wallpapers
 
         public static WallpaperManifest GetWallpaper(string path)
         {
-            string settingsFile = ReadSettingsAsString(path);
+            string settingsFile = SettingsUtil.ReadSettingsAsString(path);
             WallpaperManifest result;
             result = JsonConvert.DeserializeObject<WallpaperManifest>(settingsFile);
-
-            return result;
-        }
-
-        private static string ReadSettingsAsString(string path)
-        {
-            string result = null;
-
-            try
-            {
-                FileStream fs = new FileStream(path, FileMode.Open);
-                using (StreamReader sr = new StreamReader(fs))
-                {
-                    result = sr.ReadToEnd();
-                }
-            }
-            catch (IOException e)
-            {
-                // _logger.LogError(default(EventId), e, e.Message);
-            }
 
             return result;
         }
