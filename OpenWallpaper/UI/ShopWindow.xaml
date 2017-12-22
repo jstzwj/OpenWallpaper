@@ -5,8 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpenWallpaper.UI"
         mc:Ignorable="d"
-        Title="ShopWindow" Height="300" Width="300">
+        Title="ShopWindow" Height="500" Width="800">
     <Grid>
-        
+        <Grid Margin="0,0,200,0">
+            <Grid Height="50" VerticalAlignment="Top">
+                <TextBox Width="200" Margin="10,10,10,10" HorizontalAlignment="Left" FontSize="20"/>
+                <Button Content="search" Width="50" Margin="210,10,10,10" HorizontalAlignment="Left" BorderBrush="#00707070" Cursor="Hand"/>
+                <Button Content="tasks" Width="50" Margin="10,10,180,10" HorizontalAlignment="Right" BorderBrush="#00707070" Cursor="Hand"/>
+                <ComboBox Margin="10,10,10,20" Width="150" HorizontalAlignment="Right"/>
+            </Grid>
+            <ScrollViewer Margin="0,50,0,0" VerticalScrollBarVisibility="Auto">
+                <WrapPanel Name="MainWrapPanel" Margin="0,0,0,0">
+                </WrapPanel>
+            </ScrollViewer>
+        </Grid>
+        <Grid Name="WallpaperDetails" Width="200" HorizontalAlignment="Right" Background="#FFEAE8FF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="403*"/>
+                <RowDefinition Height="66*"/>
+            </Grid.RowDefinitions>
+            <Image Name="DetailImage" HorizontalAlignment="Left" Height="100" Margin="47,10,0,0" VerticalAlignment="Top" Width="100"/>
+            <Grid HorizontalAlignment="Left" Height="244" Margin="10,115,0,0" VerticalAlignment="Top" Width="180">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="37*"/>
+                    <ColumnDefinition Width="53*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Name:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="27" Width="54"/>
+                <Label Name="DetailName" Grid.Column="1" HorizontalAlignment="Left" Margin="10,12,0,0" VerticalAlignment="Top" Width="86"/>
+                <Label Content="Author:" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
+                <Label Name="DetailAuthor" Grid.Column="1" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" Width="86"/>
+                <Label Content="Brief:" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
+                <Label Name="DetailBrief" Grid.Column="1" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Height="60" Width="86"/>
+                <Label Content="Type" HorizontalAlignment="Left" Margin="9,72,0,0" VerticalAlignment="Top"/>
+                <Label Name="DetailType" Grid.Column="1" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="86"/>
+            </Grid>
+            <Button Content="Download" HorizontalAlignment="Left" Margin="47,23,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="33"/>
+        </Grid>
     </Grid>
 </Window>
