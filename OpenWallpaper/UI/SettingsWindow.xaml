@@ -20,6 +20,10 @@
             <TabItem Header="General">
                 <Grid Background="#FFE5E5E5">
                     <CheckBox Content="AutoStart" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Source:" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="81,34,0,0" VerticalAlignment="Top" Width="120" IsEditable="True"/>
+                    <Label Content="Language:" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="81,66,0,0" VerticalAlignment="Top" Width="120"/>
                 </Grid>
             </TabItem>
             <TabItem Header="About">
