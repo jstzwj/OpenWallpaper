@@ -1,6 +1,7 @@
 ﻿using OpenWallpaper.Wallpapers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,32 +31,16 @@ namespace OpenWallpaper.UI
             _wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
             foreach (var each in _wallpapersManifest.list)
             {
-                WallpaperItem item = new WallpaperItem();
-                item.data = each;
-                item.SetValue(WallpaperItem.WallpaperNameProperty,each.WallpaperName);
-                item.Margin = new Thickness(10, 10, 10, 10);
-
-
-                string imagePath = System.IO.Path.Combine(
-                    System.IO.Path.GetDirectoryName(each.WallpaperPath), 
-                    WallpaperManifest.GetWallpaper(each.WallpaperPath).WallpaperThumbnail
-                    );
-                item.SetValue(WallpaperItem.ImagePathProperty, imagePath);
-                item.WallpaperCheckbox.IsChecked = each.IsInPlaylist;
-
-                item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
-                item.WallpaperCheckbox.Unchecked += new RoutedEventHandler(CheckBoxUnchecked);
-                item.ItemMask.MouseDown += new MouseButtonEventHandler(ItemMaskClicked);
-                MainWrapPanel.Children.Add(item);
+                WallpaperItem item = AddWallpaper(each);
 
                 if (each.IsInPlaylist)
                     AddWallpaperItemInPlaylist(item);
 
                 if (each == _wallpapersManifest.list[0])
                     showDetailsFromItem(item);
-
-                _showPage = showPage;
             }
+
+            _showPage = showPage;
 
             ButtonAdd.Click += new RoutedEventHandler(AddButtonClicked);
             ButtonDelete.Click += new RoutedEventHandler(DeleteButtonClicked);
@@ -74,6 +59,29 @@ namespace OpenWallpaper.UI
             DetailAuthor.Content = "";
             DetailBrief.Content = "";
             DetailType.Content = item.data.WallpaperType;
+        }
+
+        public WallpaperItem AddWallpaper(WallpaperManifestItem manifestItem)
+        {
+            WallpaperItem item = new WallpaperItem();
+            item.data = manifestItem;
+            item.SetValue(WallpaperItem.WallpaperNameProperty, manifestItem.WallpaperName);
+            item.Margin = new Thickness(10, 10, 10, 10);
+
+
+            string imagePath = System.IO.Path.Combine(
+                System.IO.Path.GetDirectoryName(manifestItem.WallpaperPath),
+                WallpaperManifest.GetWallpaper(manifestItem.WallpaperPath).WallpaperThumbnail
+                );
+            item.SetValue(WallpaperItem.ImagePathProperty, imagePath);
+            item.WallpaperCheckbox.IsChecked = manifestItem.IsInPlaylist;
+
+            item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
+            item.WallpaperCheckbox.Unchecked += new RoutedEventHandler(CheckBoxUnchecked);
+            item.ItemMask.MouseDown += new MouseButtonEventHandler(ItemMaskClicked);
+            MainWrapPanel.Children.Add(item);
+
+            return item;
         }
 
         public void AddWallpaperItemInPlaylist(WallpaperItem item)
@@ -170,10 +178,32 @@ namespace OpenWallpaper.UI
         {
             Microsoft.Win32.OpenFileDialog dialog =
                 new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "文本文件|*.txt";
+            dialog.Filter = "zip压缩文件|*.zip";
             if (dialog.ShowDialog() == true)
             {
-                // lblFileName.Content = dialog.FileName;
+                string file = dialog.FileName;
+                string targetDirectory = System.IO.Path.Combine(System.IO.Path.GetFullPath("wallpaper"),
+                    System.IO.Path.GetFileNameWithoutExtension(file));
+                Package.PackageInstall.Install(file, System.IO.Path.GetFullPath("wallpaper"));
+
+                WallpaperManifest manifest = WallpaperManifest.GetWallpaper(System.IO.Path.Combine(targetDirectory, "manifest.json"));
+
+                WallpaperManifestItem manifestItem = new WallpaperManifestItem();
+                manifestItem.WallpaperID = _wallpapersManifest.nextID;
+                _wallpapersManifest.nextID++;
+                manifestItem.WallpaperPath = System.IO.Path.Combine(targetDirectory,"manifest.json");
+                manifestItem.WallpaperName = manifest.WallpaperName;
+                manifestItem.WallpaperType = manifest.WallpaperType;
+
+                _wallpapersManifest.list.Add(manifestItem);
+
+                WallpaperItem item = AddWallpaper(manifestItem);
+
+                if (manifestItem.IsInPlaylist)
+                    AddWallpaperItemInPlaylist(item);
+
+                if (manifestItem == _wallpapersManifest.list[0])
+                    showDetailsFromItem(item);
             }
         }
 
@@ -204,6 +234,7 @@ namespace OpenWallpaper.UI
             foreach (WallpaperItem each in removed)
             {
                 MainWrapPanel.Children.Remove(each);
+                Directory.Delete(System.IO.Path.GetDirectoryName(each.data.WallpaperPath), true);
             }
         }
 

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace OpenWallpaper.Settings
 {
@@ -43,6 +45,25 @@ namespace OpenWallpaper.Settings
             {
                 // _logger.LogError(default(EventId), e, e.Message);
             }
+        }
+
+        public static BitmapImage ReadImage(string path)
+        {
+            BitmapImage bitmapImage;
+            using (BinaryReader reader = new BinaryReader(File.Open(path, FileMode.Open)))
+            {
+                FileInfo fi = new FileInfo(path);
+                byte[] bytes = reader.ReadBytes((int)fi.Length);
+                reader.Close();
+
+                bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = new MemoryStream(bytes);
+                bitmapImage.EndInit();
+
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            }
+            return bitmapImage;
         }
     }
 }
