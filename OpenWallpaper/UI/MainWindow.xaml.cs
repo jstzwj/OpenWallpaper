@@ -5,7 +5,9 @@ using OpenWallpaper.Settings;
 using OpenWallpaper.Wallpapers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,7 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using static OpenWallpaper.Win32Wrapper;
 
 namespace OpenWallpaper.UI
 {
@@ -173,9 +175,21 @@ namespace OpenWallpaper.UI
             System.Windows.Application.Current.Shutdown();
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            // release hook
+            UnhookWindowsHookEx(InterceptMouse._hookID);
+        }
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             _handle = (new WindowInteropHelper(this)).Handle;
+
+            // set hook
+            InterceptMouse._windowHandle = new HandleRef(this, _handle);
+            InterceptMouse._hookID = InterceptMouse.SetHook(InterceptMouse._proc);
+
+            // set desktop
             WindowDesktopBind.SetDesktopAsParent(_handle);
         }
 

@@ -43,6 +43,8 @@ namespace OpenWallpaper.UI
             ButtonAdd.Click += new RoutedEventHandler(AddButtonClicked);
             ButtonDelete.Click += new RoutedEventHandler(DeleteButtonClicked);
             ButtonPlay.Click += new RoutedEventHandler(PlayButtonClicked);
+
+            SearchButton.Click += new RoutedEventHandler(SearchWallpaper);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -72,7 +74,7 @@ namespace OpenWallpaper.UI
                 WallpaperManifest.GetWallpaper(manifestItem.WallpaperPath).WallpaperThumbnail
                 );
             item.SetValue(WallpaperItem.ImagePathProperty, imagePath);
-            item.WallpaperCheckbox.IsChecked = manifestItem.IsInPlaylist;
+            item.WallpaperCheckbox.IsChecked = false;
 
             item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
             item.WallpaperCheckbox.Unchecked += new RoutedEventHandler(CheckBoxUnchecked);
@@ -140,6 +142,18 @@ namespace OpenWallpaper.UI
                 {
                     if (wallpaperManifestItem != null)
                         wallpaperManifestItem.IsInPlaylist = false;
+                }
+            }
+        }
+
+        private void SearchWallpaper(object sender, EventArgs e)
+        {
+            MainWrapPanel.Children.Clear();
+            foreach (WallpaperManifestItem each in AppData._wallpapersManifest.list)
+            {
+                if (each.WallpaperName.Contains(SearchBox.Text))
+                {
+                    AddWallpaper(each);
                 }
             }
         }
@@ -233,7 +247,7 @@ namespace OpenWallpaper.UI
         {
             Rectangle obj = (Rectangle)sender;
             WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
-            parent.WallpaperCheckbox.IsChecked = !parent.WallpaperCheckbox.IsChecked;
+            // parent.WallpaperCheckbox.IsChecked = !parent.WallpaperCheckbox.IsChecked;
 
             string indexAbsolutePath = System.IO.Path.Combine(
                     System.IO.Path.GetDirectoryName(parent.data.WallpaperPath),

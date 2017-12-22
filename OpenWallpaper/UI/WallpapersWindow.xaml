@@ -9,8 +9,8 @@
     <Grid>
         <Grid Margin="0,0,200,0">
             <Grid Height="50" VerticalAlignment="Top">
-                <TextBox Width="200" Margin="10,10,10,10" HorizontalAlignment="Left" FontSize="20"/>
-                <Button Content="search" Width="50" Margin="210,10,10,10" HorizontalAlignment="Left" BorderBrush="#00707070" Cursor="Hand">
+                <TextBox Name="SearchBox" Width="200" Margin="10,10,10,10" HorizontalAlignment="Left" FontSize="20"/>
+                <Button Name="SearchButton" Content="search" Width="50" Margin="210,10,10,10" HorizontalAlignment="Left" BorderBrush="#00707070" Cursor="Hand">
                 </Button>
 
                 <Button Content="+" Name="ButtonAdd" Width="30" Margin="10,10,50,10" HorizontalAlignment="right" BorderBrush="#00707070" Cursor="Hand">
