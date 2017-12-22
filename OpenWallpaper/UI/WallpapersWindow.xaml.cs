@@ -21,22 +21,20 @@ namespace OpenWallpaper.UI
     /// </summary>
     public partial class WallpapersWindow : Window
     {
-        private WallpapersManifest _wallpapersManifest;
-
         private MainWindow.ShowPageEventHandler _showPage;
 
         public WallpapersWindow(MainWindow.ShowPageEventHandler showPage)
         {
             InitializeComponent();
-            _wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
-            foreach (var each in _wallpapersManifest.list)
+            AppData._wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
+            foreach (var each in AppData._wallpapersManifest.list)
             {
                 WallpaperItem item = AddWallpaper(each);
 
                 if (each.IsInPlaylist)
                     AddWallpaperItemInPlaylist(item);
 
-                if (each == _wallpapersManifest.list[0])
+                if (each == AppData._wallpapersManifest.list[0])
                     showDetailsFromItem(item);
             }
 
@@ -49,7 +47,7 @@ namespace OpenWallpaper.UI
 
         protected override void OnClosed(EventArgs e)
         {
-            WallpapersManifest.WriteWallpapersList("wallpaperManifest.json", _wallpapersManifest);
+            WallpapersManifest.WriteWallpapersList("wallpaperManifest.json", AppData._wallpapersManifest);
         }
 
         public void showDetailsFromItem(WallpaperItem item)
@@ -114,7 +112,7 @@ namespace OpenWallpaper.UI
         public WallpaperManifestItem FindInManifest(WallpaperItem item)
         {
             WallpaperManifestItem removedItem = null;
-            foreach (var each in _wallpapersManifest.list)
+            foreach (var each in AppData._wallpapersManifest.list)
             {
                 if (each.WallpaperID == item.data.WallpaperID)
                 {
@@ -152,13 +150,6 @@ namespace OpenWallpaper.UI
             WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
 
             showDetailsFromItem(parent);
-
-            string indexAbsolutePath = System.IO.Path.Combine(
-                    System.IO.Path.GetDirectoryName(parent.data.WallpaperPath),
-                    WallpaperManifest.GetWallpaper(parent.data.WallpaperPath).WallpaperMainPath
-                    );
-
-            _showPage(indexAbsolutePath);
         }
 
         private void CheckBoxUnchecked(object sender, EventArgs e)
@@ -189,20 +180,20 @@ namespace OpenWallpaper.UI
                 WallpaperManifest manifest = WallpaperManifest.GetWallpaper(System.IO.Path.Combine(targetDirectory, "manifest.json"));
 
                 WallpaperManifestItem manifestItem = new WallpaperManifestItem();
-                manifestItem.WallpaperID = _wallpapersManifest.nextID;
-                _wallpapersManifest.nextID++;
+                manifestItem.WallpaperID = AppData._wallpapersManifest.nextID;
+                AppData._wallpapersManifest.nextID++;
                 manifestItem.WallpaperPath = System.IO.Path.Combine(targetDirectory,"manifest.json");
                 manifestItem.WallpaperName = manifest.WallpaperName;
                 manifestItem.WallpaperType = manifest.WallpaperType;
 
-                _wallpapersManifest.list.Add(manifestItem);
+                AppData._wallpapersManifest.list.Add(manifestItem);
 
                 WallpaperItem item = AddWallpaper(manifestItem);
 
                 if (manifestItem.IsInPlaylist)
                     AddWallpaperItemInPlaylist(item);
 
-                if (manifestItem == _wallpapersManifest.list[0])
+                if (manifestItem == AppData._wallpapersManifest.list[0])
                     showDetailsFromItem(item);
             }
         }
@@ -219,7 +210,7 @@ namespace OpenWallpaper.UI
                     RemoveWallpaperItemInPlaylist(each);
                     if (wallpaperManifestItem != null)
                     {
-                        _wallpapersManifest.list.Remove(wallpaperManifestItem);
+                        AppData._wallpapersManifest.list.Remove(wallpaperManifestItem);
                     }
 
                     removed.Add(each);
@@ -243,6 +234,13 @@ namespace OpenWallpaper.UI
             Rectangle obj = (Rectangle)sender;
             WallpaperItem parent = (WallpaperItem)((Grid)obj.Parent).Parent;
             parent.WallpaperCheckbox.IsChecked = !parent.WallpaperCheckbox.IsChecked;
+
+            string indexAbsolutePath = System.IO.Path.Combine(
+                    System.IO.Path.GetDirectoryName(parent.data.WallpaperPath),
+                    WallpaperManifest.GetWallpaper(parent.data.WallpaperPath).WallpaperMainPath
+                    );
+
+            _showPage(indexAbsolutePath);
         }
     }
 }

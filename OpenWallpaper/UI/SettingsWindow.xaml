@@ -9,7 +9,13 @@
     <Grid>
         <TabControl  Margin="0,0,0,0">
             <TabItem Header="Performance">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel>
+                        <Grid Height="30" Margin="10">
+                            <CheckBox Content="Enable GPU"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
             </TabItem>
             <TabItem Header="General">
                 <Grid Background="#FFE5E5E5">

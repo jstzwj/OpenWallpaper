@@ -48,6 +48,33 @@ namespace OpenWallpaper.Wallpapers
             list = new List<WallpaperManifestItem>();
         }
 
+        public WallpaperManifestItem RandomWallpaperInPlaylist()
+        {
+            int count = 0;
+            foreach (WallpaperManifestItem each in list)
+            {
+                if (each.IsInPlaylist)
+                    ++count;
+            }
+
+            Random random = new Random();
+            int index = random.Next(count);
+
+            count = 0;
+            foreach (WallpaperManifestItem each in list)
+            {
+                if (count == index)
+                {
+                    return each;
+                }
+
+                if (each.IsInPlaylist)
+                    ++count;
+            }
+
+            return null;
+        }
+
         public static WallpapersManifest GetWallpapersList(string path)
         {
             string jsonData = SettingsUtil.ReadSettingsAsString(path);

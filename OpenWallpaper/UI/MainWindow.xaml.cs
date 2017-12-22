@@ -1,5 +1,8 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
+using Microsoft.Win32;
+using OpenWallpaper.Settings;
+using OpenWallpaper.Wallpapers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +32,7 @@ namespace OpenWallpaper.UI
 
         private IntPtr _handle;
 
-        private NotifyIcon notifyIcon;
+        private NotifyIcon _notifyIcon;
 
         private ChromiumWebBrowser _chromiumWebBrowser;
 
@@ -45,8 +48,20 @@ namespace OpenWallpaper.UI
 
             // create browser
             _chromiumWebBrowser = new ChromiumWebBrowser();
-            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty, "file:///C:/Users/WangJun/source/repos/OpenWallpaper/OpenWallpaper/wallpaper/watch/index.html");
+            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,
+                "about:blank");
             MainGrid.Children.Add(_chromiumWebBrowser);
+
+            // random wallpaper
+            RandomWallpaper();
+
+            // listen system event
+             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
+        }
+
+        ~MainWindow()
+        {
+            Microsoft.Win32.SystemEvents.SessionSwitch -= new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
         }
 
         public void ShowPage(string path)
@@ -54,11 +69,50 @@ namespace OpenWallpaper.UI
             _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,"file:///" + path);
         }
 
+        private void RandomWallpaper()
+        {
+            // random wallpaper
+            AppData._wallpapersManifest = WallpapersManifest.GetWallpapersList("wallpaperManifest.json");
+            Wallpapers.WallpaperManifestItem randomWallpaper = AppData._wallpapersManifest.RandomWallpaperInPlaylist();
+            WallpaperManifest manifest = WallpaperManifest.GetWallpaper(randomWallpaper.WallpaperPath);
+
+            // get index.html path
+            string wallpaperDirectory = System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(randomWallpaper.WallpaperPath));
+            string indexPath = System.IO.Path.Combine(wallpaperDirectory, manifest.WallpaperMainPath);
+
+            // create browser
+            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,
+                "file:///" + indexPath);
+        }
+
+        private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            switch (e.Reason)
+            {
+                case SessionSwitchReason.SessionLogon:
+                    // Console.WriteLine("用户登录");
+                    RandomWallpaper();
+                    break;
+
+                case SessionSwitchReason.SessionUnlock:
+                    // Console.WriteLine("解锁");
+                    RandomWallpaper();
+                    break;
+
+                case SessionSwitchReason.SessionLock:
+                    // Console.WriteLine("锁屏");
+                    break;
+                case SessionSwitchReason.SessionLogoff:
+                    // Console.WriteLine("注销");
+                    break;
+            }
+        }
+
         private void SetIcon()
         {
-            this.notifyIcon = new NotifyIcon();
-            this.notifyIcon.Icon = new System.Drawing.Icon("AppIcon.ico");
-            this.notifyIcon.Visible = true;
+            _notifyIcon = new NotifyIcon();
+            _notifyIcon.Icon = new System.Drawing.Icon("AppIcon.ico");
+            _notifyIcon.Visible = true;
 
             //打开菜单项
             System.Windows.Forms.MenuItem settings = new System.Windows.Forms.MenuItem("Settings");
@@ -76,9 +130,9 @@ namespace OpenWallpaper.UI
             exit.Click += new EventHandler(Close);
             //关联托盘控件
             System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { settings, wallPapers, shop, exit };
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
+            _notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
 
-            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, e) =>
+            _notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler((o, e) =>
             {
                 if (e.Button == MouseButtons.Left) this.ShowSettings(o, e);
             });
