@@ -36,11 +36,11 @@ namespace OpenWallpaper.UI
                 item.Margin = new Thickness(10, 10, 10, 10);
 
 
-                string imageAbsolutePath = System.IO.Path.Combine(
+                string imagePath = System.IO.Path.Combine(
                     System.IO.Path.GetDirectoryName(each.WallpaperPath), 
                     WallpaperManifest.GetWallpaper(each.WallpaperPath).WallpaperThumbnail
                     );
-                item.SetValue(WallpaperItem.ImagePathProperty, imageAbsolutePath);
+                item.SetValue(WallpaperItem.ImagePathProperty, imagePath);
                 item.WallpaperCheckbox.IsChecked = each.IsInPlaylist;
 
                 item.WallpaperCheckbox.Checked += new RoutedEventHandler(CheckBoxChecked);
@@ -118,6 +118,26 @@ namespace OpenWallpaper.UI
             return removedItem;
         }
 
+        public void UpdatePlaylist()
+        {
+            Playlist.Children.Clear();
+            foreach (WallpaperItem each in MainWrapPanel.Children)
+            {
+                WallpaperManifestItem wallpaperManifestItem = FindInManifest(each);
+                if (each.WallpaperCheckbox.IsChecked == true)
+                {
+                    AddWallpaperItemInPlaylist(each);
+                    if (wallpaperManifestItem != null)
+                        wallpaperManifestItem.IsInPlaylist = true;
+                }
+                else
+                {
+                    if (wallpaperManifestItem != null)
+                        wallpaperManifestItem.IsInPlaylist = false;
+                }
+            }
+        }
+
         private void CheckBoxChecked(object sender, EventArgs e)
         {
             CheckBox obj = (CheckBox)sender;
@@ -143,15 +163,36 @@ namespace OpenWallpaper.UI
 
         private void PlayButtonClicked(object sender, EventArgs e)
         {
-            Playlist.Children.Clear();
+            UpdatePlaylist();
+        }
+
+        private void AddButtonClicked(object sender, EventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog dialog =
+                new Microsoft.Win32.OpenFileDialog();
+            dialog.Filter = "文本文件|*.txt";
+            if (dialog.ShowDialog() == true)
+            {
+                // lblFileName.Content = dialog.FileName;
+            }
+        }
+
+        private void DeleteButtonClicked(object sender, EventArgs e)
+        {
+            List<WallpaperItem> removed = new List<WallpaperItem>();
+
             foreach (WallpaperItem each in MainWrapPanel.Children)
             {
                 WallpaperManifestItem wallpaperManifestItem = FindInManifest(each);
                 if (each.WallpaperCheckbox.IsChecked == true)
                 {
-                    AddWallpaperItemInPlaylist(each);                    
+                    RemoveWallpaperItemInPlaylist(each);
                     if (wallpaperManifestItem != null)
-                        wallpaperManifestItem.IsInPlaylist = true;
+                    {
+                        _wallpapersManifest.list.Remove(wallpaperManifestItem);
+                    }
+
+                    removed.Add(each);
                 }
                 else
                 {
@@ -159,14 +200,11 @@ namespace OpenWallpaper.UI
                         wallpaperManifestItem.IsInPlaylist = false;
                 }
             }
-        }
 
-        private void AddButtonClicked(object sender, EventArgs e)
-        {
-        }
-
-        private void DeleteButtonClicked(object sender, EventArgs e)
-        {
+            foreach (WallpaperItem each in removed)
+            {
+                MainWrapPanel.Children.Remove(each);
+            }
         }
 
         private void ItemMaskClicked(object sender, EventArgs e)

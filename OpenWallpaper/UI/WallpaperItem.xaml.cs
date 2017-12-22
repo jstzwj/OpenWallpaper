@@ -45,7 +45,7 @@ namespace OpenWallpaper.UI
             if (sender != null)
             {
                 WallpaperItem obj = (WallpaperItem)sender;
-                obj.WallpaperImage.Source = new BitmapImage(new Uri((string)arg.NewValue, UriKind.RelativeOrAbsolute));
+                obj.WallpaperImage.Source = new BitmapImage(new Uri(System.IO.Path.GetFullPath((string)arg.NewValue), UriKind.RelativeOrAbsolute));
             }
         }
 
