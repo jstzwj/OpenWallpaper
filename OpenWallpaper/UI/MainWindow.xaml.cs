@@ -51,7 +51,7 @@ namespace OpenWallpaper.UI
             // create browser
             _chromiumWebBrowser = new ChromiumWebBrowser();
             _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,
-                "www.bilibili.com");
+                "about:blank");
 
             _chromiumWebBrowser.MenuHandler = new MenuHandler();
             MainGrid.Children.Add(_chromiumWebBrowser);
@@ -60,7 +60,7 @@ namespace OpenWallpaper.UI
             // RandomWallpaper();
 
             // listen system event
-             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
+            SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
         }
 
         ~MainWindow()
@@ -70,7 +70,7 @@ namespace OpenWallpaper.UI
 
         public void ShowPage(string path)
         {
-            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,"file:///" + path);
+            _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty, "file:///" + path);
         }
 
         private void RandomWallpaper()
@@ -212,9 +212,9 @@ namespace OpenWallpaper.UI
             base.OnRender(drawingContext);
         }
 
-        public void MouseEventHandler(MouseMessages msg,int x, int y)
+        public void MouseEventHandler(MouseMessages msg, int x, int y)
         {
-            switch(msg)
+            switch (msg)
             {
                 case MouseMessages.WM_LBUTTONDOWN:
                     _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, false, 1, CefEventFlags.None);
@@ -236,30 +236,136 @@ namespace OpenWallpaper.UI
             }
         }
 
-        public void KeyEventHandler(KeyMessages msg, int vkCode)
+        CefEventFlags GetCefKeyboardModifiers(int wparam, int lparam)
         {
-            switch (msg)
+            CefEventFlags modifiers = 0;
+            if (Keyboard.IsKeyDown(Key.LeftShift)|| Keyboard.IsKeyDown(Key.RightShift))
+                modifiers |= CefEventFlags.ShiftDown;
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                modifiers |= CefEventFlags.ControlDown;
+            if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+                modifiers |= CefEventFlags.AltDown;
+
+            // Low bit set from GetKeyState indicates "toggled".
+            if ((GetKeyState((VirtualKeyStates)VirtualKeys.NumLock) & 1) != 0)
+                modifiers |= CefEventFlags.NumLockOn;
+            if ((GetKeyState((VirtualKeyStates)VirtualKeys.CapsLock) & 1) != 0)
+                modifiers |= CefEventFlags.CapsLockOn;
+
+            switch ((VirtualKeys)wparam)
             {
-                case KeyMessages.WM_KEYDOWN:
-                    {
-                        KeyEvent evnt = new KeyEvent();
-                        evnt.Modifiers = CefEventFlags.None;
-                        evnt.WindowsKeyCode = vkCode;
-                        evnt.Type = KeyEventType.KeyDown;
-                        _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
-                    }
-                    break;
-                case KeyMessages.WM_KEYUP:
-                    {
-                        KeyEvent evnt = new KeyEvent();
-                        evnt.Modifiers = CefEventFlags.None;
-                        evnt.WindowsKeyCode = vkCode;
-                        evnt.Type = KeyEventType.KeyUp;
-                        _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
-                    }
-                    break;
+            case VirtualKeys.Return:
+                if (((lparam >> 16) & (uint)KeyFlags.KF_EXTENDED) != 0)
+                modifiers |= CefEventFlags.IsKeyPad;
+            break;
+             case VirtualKeys.Insert:
+             case VirtualKeys.Delete:
+             case VirtualKeys.Home:
+             case VirtualKeys.End:
+             case VirtualKeys.Prior:
+             case VirtualKeys.Next:
+             case VirtualKeys.Up:
+             case VirtualKeys.Down:
+             case VirtualKeys.Left:
+             case VirtualKeys.Right:
+                 if (((lparam >> 16) & (uint)KeyFlags.KF_EXTENDED) == 0)
+                     modifiers |= CefEventFlags.IsKeyPad;
+                 break;
+             case VirtualKeys.NumLock:
+             case VirtualKeys.Numpad0:
+             case VirtualKeys.Numpad1:
+             case VirtualKeys.Numpad2:
+             case VirtualKeys.Numpad3:
+             case VirtualKeys.Numpad4:
+             case VirtualKeys.Numpad5:
+             case VirtualKeys.Numpad6:
+             case VirtualKeys.Numpad7:
+             case VirtualKeys.Numpad8:
+             case VirtualKeys.Numpad9:
+             case VirtualKeys.Divide:
+             case VirtualKeys.Multiply:
+             case VirtualKeys.Subtract:
+             case VirtualKeys.Add:
+             case VirtualKeys.Decimal:
+             case VirtualKeys.Clear:
+                 modifiers |= CefEventFlags.IsKeyPad;
+                 break;
+             case VirtualKeys.Shift:
+                 if (Keyboard.IsKeyDown(Key.LeftShift))
+                     modifiers |= CefEventFlags.IsLeft;
+                 else if (Keyboard.IsKeyDown(Key.RightShift))
+                     modifiers |= CefEventFlags.IsRight;
+                 break;
+             case VirtualKeys.Control:
+                 if (Keyboard.IsKeyDown(Key.LeftCtrl))
+                     modifiers |= CefEventFlags.IsLeft;
+                 else if (Keyboard.IsKeyDown(Key.RightCtrl))
+                     modifiers |= CefEventFlags.IsRight;
+                 break;
+             case VirtualKeys.Menu:
+                 if (Keyboard.IsKeyDown(Key.LeftAlt))
+                     modifiers |= CefEventFlags.IsLeft;
+                 else if (Keyboard.IsKeyDown(Key.RightAlt))
+                     modifiers |= CefEventFlags.IsRight;
+                 break;
+             case VirtualKeys.LeftWindows:
+                 modifiers |= CefEventFlags.IsLeft;
+                 break;
+             case VirtualKeys.RightWindows:
+                 modifiers |= CefEventFlags.IsRight;
+                 break;
+             }
+             return modifiers;
+        }
+
+        public void KeyEventHandler(KeyMessages msg, int wParam, int lParam)
+        {
+            //KeyEvent evnt = new KeyEvent();
+            //evnt.WindowsKeyCode = wParam;
+            //evnt.NativeKeyCode = lParam;
+            //evnt.IsSystemKey = msg == KeyMessages.WM_SYSCHAR ||
+            //                        msg == KeyMessages.WM_SYSKEYDOWN ||
+            //                        msg == KeyMessages.WM_SYSKEYUP;
+
+            //if (msg == KeyMessages.WM_KEYDOWN || msg == KeyMessages.WM_SYSKEYDOWN)
+            //    evnt.Type = KeyEventType.RawKeyDown;
+            //else if (msg == KeyMessages.WM_KEYUP || msg == KeyMessages.WM_SYSKEYUP)
+            //    evnt.Type = KeyEventType.KeyUp;
+            //else
+            //    evnt.Type = KeyEventType.Char;
+            //evnt.Modifiers = GetCefKeyboardModifiers(wParam, lParam);
+
+            //_chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
+
+            // _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent((int)msg, wParam, lParam);
+
+            KeyEvent evnt = new KeyEvent();
+            evnt.WindowsKeyCode = lParam;
+            evnt.IsSystemKey = msg == KeyMessages.WM_SYSCHAR ||
+                                    msg == KeyMessages.WM_SYSKEYDOWN ||
+                                    msg == KeyMessages.WM_SYSKEYUP;
+
+            evnt.Modifiers = GetCefKeyboardModifiers(wParam, lParam);
+
+            if (msg == KeyMessages.WM_KEYDOWN || msg == KeyMessages.WM_SYSKEYDOWN)
+            {
+                evnt.Type = KeyEventType.RawKeyDown;
+                _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
+                evnt.Type = KeyEventType.Char;
+                _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
+            }
+            else if (msg == KeyMessages.WM_KEYUP || msg == KeyMessages.WM_SYSKEYUP)
+            {
+                evnt.Type = KeyEventType.KeyUp;
+                _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
+            }
+            else
+            {
+                evnt.Type = KeyEventType.Char;
+                _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
             }
         }
+
     }
 
     internal class MenuHandler : IContextMenuHandler

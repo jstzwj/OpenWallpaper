@@ -27,6 +27,38 @@ namespace OpenWallpaper
                 return SetWindowsHookEx((int)HookType.WH_MOUSE_LL, proc,
                     GetModuleHandle(curModule.ModuleName), 0);
             }
+
+            //IntPtr hwndWorkerW = IntPtr.Zero;
+            //IntPtr hShellDefView = IntPtr.Zero;
+            //IntPtr hwndDesktop = IntPtr.Zero;
+
+            //IntPtr hProgMan = Win32Wrapper.FindWindow("ProgMan", null);
+            //Win32Wrapper.EnumWindows(new Win32Wrapper.EnumWindowsProc((tophandle, topparamhandle) =>
+            //{
+            //    IntPtr p = Win32Wrapper.FindWindowEx(tophandle,
+            //                                IntPtr.Zero,
+            //                                "SHELLDLL_DefView",
+            //                                null);
+
+            //    if (p != IntPtr.Zero)
+            //    {
+            //        // Gets the WorkerW Window after the current one.
+            //        hwndWorkerW = Win32Wrapper.FindWindowEx(IntPtr.Zero,
+            //                                   tophandle,
+            //                                   "WorkerW",
+            //                                   null);
+
+            //        hwndDesktop = Win32Wrapper.FindWindowEx(p,
+            //                                    IntPtr.Zero,
+            //                                   "SysListView32",
+            //                                   null);
+            //        return false;
+            //    }
+            //    return true;
+            //}), IntPtr.Zero);
+
+            //return SetWindowsHookEx((int)HookType.WH_MOUSE_LL, proc,
+            //    GetModuleHandle(Process.GetProcessesByName("explorer")[0].MainModule.ModuleName), GetWindowThreadProcessId(hwndDesktop, IntPtr.Zero));
         }
 
         public static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
