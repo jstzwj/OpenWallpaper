@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:OpenWallpaper"
         xmlns:cefSharp="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" WindowStyle="None" Height="350" Width="525"
+        Title="OpenWallpaperMainWindow" WindowStyle="None" Height="350" Width="525"
         BorderThickness="0" AllowsTransparency="True">
     <Grid Name="MainGrid">
     </Grid>

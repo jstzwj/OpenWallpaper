@@ -51,11 +51,13 @@ namespace OpenWallpaper.UI
             // create browser
             _chromiumWebBrowser = new ChromiumWebBrowser();
             _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,
-                "about:blank");
+                "www.bilibili.com");
+
+            _chromiumWebBrowser.MenuHandler = new MenuHandler();
             MainGrid.Children.Add(_chromiumWebBrowser);
 
             // random wallpaper
-            RandomWallpaper();
+            // RandomWallpaper();
 
             // listen system event
              SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
@@ -179,29 +181,110 @@ namespace OpenWallpaper.UI
         {
             // release hook
             UnhookWindowsHookEx(InterceptMouse._hookID);
+            UnhookWindowsHookEx(InterceptKey._hookID);
         }
 
         protected override void OnSourceInitialized(EventArgs e)
         {
             _handle = (new WindowInteropHelper(this)).Handle;
 
-            // set hook
-            InterceptMouse._windowHandle = new HandleRef(this, _handle);
-            InterceptMouse._hookID = InterceptMouse.SetHook(InterceptMouse._proc);
-
             // set desktop
             WindowDesktopBind.SetDesktopAsParent(_handle);
-        }
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
+            // set hook
+            InterceptMouse._window = this;
+            InterceptMouse._hookID = InterceptMouse.SetHook(InterceptMouse._proc);
+
+            InterceptKey._window = this;
+            InterceptKey._hookID = InterceptKey.SetHook(InterceptKey._proc);
+
+            // set size
             double x1 = SystemParameters.PrimaryScreenWidth;//得到屏幕宽度
             double y1 = SystemParameters.PrimaryScreenHeight;//得到屏幕高度
             this.Left = 0;
             this.Top = 0;
             this.Height = y1;
             this.Width = x1;
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
             base.OnRender(drawingContext);
+        }
+
+        public void MouseEventHandler(MouseMessages msg,int x, int y)
+        {
+            switch(msg)
+            {
+                case MouseMessages.WM_LBUTTONDOWN:
+                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, false, 1, CefEventFlags.None);
+                    break;
+                case MouseMessages.WM_LBUTTONUP:
+                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, true, 1, CefEventFlags.None);
+                    break;
+                case MouseMessages.WM_MOUSEMOVE:
+                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseMoveEvent(x, y, false, CefEventFlags.None);
+                    break;
+                case MouseMessages.WM_MOUSEWHEEL:
+                    break;
+                case MouseMessages.WM_RBUTTONDOWN:
+                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Right, true, 1, CefEventFlags.None);
+                    break;
+                case MouseMessages.WM_RBUTTONUP:
+                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Right, true, 1, CefEventFlags.None);
+                    break;
+            }
+        }
+
+        public void KeyEventHandler(KeyMessages msg, int vkCode)
+        {
+            switch (msg)
+            {
+                case KeyMessages.WM_KEYDOWN:
+                    {
+                        KeyEvent evnt = new KeyEvent();
+                        evnt.Modifiers = CefEventFlags.None;
+                        evnt.WindowsKeyCode = vkCode;
+                        evnt.Type = KeyEventType.KeyDown;
+                        _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
+                    }
+                    break;
+                case KeyMessages.WM_KEYUP:
+                    {
+                        KeyEvent evnt = new KeyEvent();
+                        evnt.Modifiers = CefEventFlags.None;
+                        evnt.WindowsKeyCode = vkCode;
+                        evnt.Type = KeyEventType.KeyUp;
+                        _chromiumWebBrowser.GetBrowser().GetHost().SendKeyEvent(evnt);
+                    }
+                    break;
+            }
+        }
+    }
+
+    internal class MenuHandler : IContextMenuHandler
+    {
+        public void OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model)
+        {
+            if ((parameters.TypeFlags & (ContextMenuType.Page | ContextMenuType.Frame)) != 0) {
+                // Add a separator if the menu already has items.
+                if (model.Count > 0)
+                {
+                    model.Clear();
+                }
+            }
+            // model.Clear();
+        }
+        public bool OnContextMenuCommand(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, CefMenuCommand commandId, CefEventFlags eventFlags)
+        {
+            return false;
+        }
+        public void OnContextMenuDismissed(IWebBrowser browserControl, IBrowser browser, IFrame frame)
+        {
+        }
+        public bool RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
+        {
+            return false;
         }
     }
 }

@@ -8,6 +8,8 @@ namespace OpenWallpaper
 {
     public class WindowDesktopBind
     {
+        public static IntPtr _workerw = IntPtr.Zero;
+
         static void PrintVisibleWindowHandles(int maxLevel = -1)
         {
             // Enumerates all existing top window handles. This includes open and visible windows, as well as invisible windows.
@@ -83,8 +85,6 @@ namespace OpenWallpaper
             // 0x00100B8A "" WorkerW                                   <--- This is the WorkerW instance we are after!
             // 0x000100EC "Program Manager" Progman
 
-            IntPtr workerw = IntPtr.Zero;
-
             // We enumerate all Windows, until we find one, that has the SHELLDLL_DefView 
             // as a child. 
             // If we found that window, we take its next sibling and assign it to workerw.
@@ -93,22 +93,22 @@ namespace OpenWallpaper
                 IntPtr p = Win32Wrapper.FindWindowEx(tophandle,
                                             IntPtr.Zero,
                                             "SHELLDLL_DefView",
-                                            IntPtr.Zero);
+                                            null);
 
                 if (p != IntPtr.Zero)
                 {
                     // Gets the WorkerW Window after the current one.
-                    workerw = Win32Wrapper.FindWindowEx(IntPtr.Zero,
+                    _workerw = Win32Wrapper.FindWindowEx(IntPtr.Zero,
                                                tophandle,
                                                "WorkerW",
-                                               IntPtr.Zero);
+                                               null);
                     return false;
                 }
 
                 return true;
             }), IntPtr.Zero);
 
-            Win32Wrapper.SetParent(handle, workerw);
+            Win32Wrapper.SetParent(handle, _workerw);
         }
     }
 }
