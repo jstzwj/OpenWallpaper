@@ -46,17 +46,31 @@ namespace OpenWallpaper.UI
 
             // cef init
             CefSettings settings = new CefSettings();
-            settings.CefCommandLineArgs.Add("off-screen-rendering-enabled", "0");
-            settings.CefCommandLineArgs.Add("off-screen-frame-rate", "60");
+            // settings.CefCommandLineArgs.Add("off-screen-rendering-enabled", "0");
+            // settings.CefCommandLineArgs.Add("off-screen-frame-rate", "60");
             settings.CefCommandLineArgs.Add("enable-3d-apis", "1");
             settings.CefCommandLineArgs.Add("enable-webgl-draft-extensions", "1");
             settings.CefCommandLineArgs.Add("disable-surfaces", "1");
-            settings.CefCommandLineArgs.Add("disable-gpu", "0");
-            settings.CefCommandLineArgs.Add("disable-gpu-compositing", "1");
-            settings.CefCommandLineArgs.Add("disable-begin-frame-scheduling", "1");
+            settings.CefCommandLineArgs.Add("enable-gpu", "1");
+            settings.CefCommandLineArgs.Add("enable-gpu-compositing", "1");
+            settings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
             // settings.CefCommandLineArgs.Add("disable-gpu-vsync", "0");
             settings.CefCommandLineArgs.Add("enable-webgl", "1");
+            settings.CefCommandLineArgs.Add("enable-media-stream", "1");
+            settings.CefCommandLineArgs.Add("enable-gpu-rasterization", "1");
+            // settings.CefCommandLineArgs.Add("force-gpu-rasterization", "1");
+            settings.CefCommandLineArgs.Add("enable-native-gpu-memory-buffers", "1");
+            settings.CefCommandLineArgs.Add("enable-accelerated-vpx-decode", "0x03");
+            // settings.CefCommandLineArgs.Add("enable-accelerated-2d-canvas", "1");
+            // settings.CefCommandLineArgs.Add("gpu-rasterization-msaa-sample-count", "0");
+            settings.CefCommandLineArgs.Add("show-fps-counter", "1");
+            // settings.CefCommandLineArgs.Add("limit-fps", "120");
+            // settings.CefCommandLineArgs.Add("enable-zero-copy", "1");
+            // settings.CefCommandLineArgs.Add("show-paint-rects", "1");
+            // settings.CefCommandLineArgs.Add("renderer-process-limit", "4");
+            // settings.CefCommandLineArgs.Add("enable-threaded-animation", "1");
             settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0";
+
             CefSharp.Cef.Initialize(settings);
 
             CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(Directory.GetCurrentDirectory(), true);
@@ -64,13 +78,13 @@ namespace OpenWallpaper.UI
             // create browser
             _chromiumWebBrowser = new ChromiumWebBrowser();
             _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,
-                "about.blank");
+                "chrome://gpu/");
 
             _chromiumWebBrowser.MenuHandler = new MenuHandler();
             MainGrid.Children.Add(_chromiumWebBrowser);
 
             // random wallpaper
-            RandomWallpaper();
+            // RandomWallpaper();
 
             // listen system event
             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
@@ -218,11 +232,8 @@ namespace OpenWallpaper.UI
             this.Top = 0;
             this.Height = y1;
             this.Width = x1;
-        }
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
+            _chromiumWebBrowser.GetBrowser().GetHost().WindowlessFrameRate = 60;
         }
 
         public void MouseEventHandler(MouseMessages msg, int x, int y)
