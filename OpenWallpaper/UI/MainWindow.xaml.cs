@@ -57,7 +57,7 @@ namespace OpenWallpaper.UI
             MainGrid.Children.Add(_chromiumWebBrowser);
 
             // random wallpaper
-            // RandomWallpaper();
+            RandomWallpaper();
 
             // listen system event
             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);

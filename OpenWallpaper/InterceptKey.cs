@@ -46,7 +46,7 @@ namespace OpenWallpaper
             //                                   "WorkerW",
             //                                   null);
 
-            //        hwndDesktop = Win32Wrapper.FindWindowEx(tophandle,
+            //        hwndDesktop = Win32Wrapper.FindWindowEx(p,
             //                                    IntPtr.Zero,
             //                                   "SysListView32",
             //                                   null);

@@ -57,8 +57,12 @@ namespace OpenWallpaper
             //    return true;
             //}), IntPtr.Zero);
 
-            //return SetWindowsHookEx((int)HookType.WH_MOUSE_LL, proc,
-            //    GetModuleHandle(Process.GetProcessesByName("explorer")[0].MainModule.ModuleName), GetWindowThreadProcessId(hwndDesktop, IntPtr.Zero));
+            //using (Process curProcess = Process.GetCurrentProcess())
+            //using (ProcessModule curModule = curProcess.MainModule)
+            //{
+            //    return SetWindowsHookEx((int)HookType.WH_MOUSE_LL, proc,
+            //        GetModuleHandle(curModule.ModuleName), GetWindowThreadProcessId(hwndDesktop, IntPtr.Zero));
+            //}
         }
 
         public static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
