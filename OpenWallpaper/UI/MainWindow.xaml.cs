@@ -6,6 +6,7 @@ using OpenWallpaper.Wallpapers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -45,13 +46,25 @@ namespace OpenWallpaper.UI
 
             // cef init
             CefSettings settings = new CefSettings();
+            settings.CefCommandLineArgs.Add("off-screen-rendering-enabled", "0");
+            settings.CefCommandLineArgs.Add("off-screen-frame-rate", "60");
+            settings.CefCommandLineArgs.Add("enable-3d-apis", "1");
+            settings.CefCommandLineArgs.Add("enable-webgl-draft-extensions", "1");
+            settings.CefCommandLineArgs.Add("disable-surfaces", "1");
             settings.CefCommandLineArgs.Add("disable-gpu", "0");
-            Cef.Initialize(settings);
+            settings.CefCommandLineArgs.Add("disable-gpu-compositing", "1");
+            settings.CefCommandLineArgs.Add("disable-begin-frame-scheduling", "1");
+            // settings.CefCommandLineArgs.Add("disable-gpu-vsync", "0");
+            settings.CefCommandLineArgs.Add("enable-webgl", "1");
+            settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0";
+            CefSharp.Cef.Initialize(settings);
+
+            CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(Directory.GetCurrentDirectory(), true);
 
             // create browser
             _chromiumWebBrowser = new ChromiumWebBrowser();
             _chromiumWebBrowser.SetValue(ChromiumWebBrowser.AddressProperty,
-                "about:blank");
+                "about.blank");
 
             _chromiumWebBrowser.MenuHandler = new MenuHandler();
             MainGrid.Children.Add(_chromiumWebBrowser);
@@ -216,14 +229,14 @@ namespace OpenWallpaper.UI
         {
             switch (msg)
             {
+                case MouseMessages.WM_MOUSEMOVE:
+                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseMoveEvent(x, y, false, CefEventFlags.None);
+                    break;
                 case MouseMessages.WM_LBUTTONDOWN:
                     _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, false, 1, CefEventFlags.None);
                     break;
                 case MouseMessages.WM_LBUTTONUP:
                     _chromiumWebBrowser.GetBrowser().GetHost().SendMouseClickEvent(x, y, MouseButtonType.Left, true, 1, CefEventFlags.None);
-                    break;
-                case MouseMessages.WM_MOUSEMOVE:
-                    _chromiumWebBrowser.GetBrowser().GetHost().SendMouseMoveEvent(x, y, false, CefEventFlags.None);
                     break;
                 case MouseMessages.WM_MOUSEWHEEL:
                     break;
